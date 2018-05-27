@@ -1,0 +1,4 @@
+services:
+#    gb_bile_mo.example:
+#        class: GB\BileMoBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

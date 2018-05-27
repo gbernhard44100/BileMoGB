@@ -1,0 +1,6 @@
+gb_bile_mo:
+    resource: "@GBBileMoBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+

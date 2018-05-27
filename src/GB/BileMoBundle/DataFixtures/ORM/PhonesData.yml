@@ -1,0 +1,63 @@
+-
+    name: ASUS Zenfone
+    brand: ASUS
+    screenSize: 5
+    pictureResolution: 13
+    memory: 16
+    processor: Qualcomm Snapdragon 400 8928
+-
+    name: Echo Mobile Moss Rouge
+    brand: Echo
+    screenSize: 5
+    pictureResolution: 5
+    memory: 16
+    processor: Quad-Core 1.3Ghz
+-
+    name: View 2 Or
+    brand: Wiko
+    screenSize: 6
+    pictureResolution: 13
+    memory: 32
+    processor: Qualcomm OctaCore 3 Go de Ram
+-
+    name: Blackview BV9000
+    brand: Wiko
+    screenSize: 5.7
+    pictureResolution: 13
+    memory: 32
+    processor: MTK6757CD 2.6Ghz Octa Core processeur
+-
+    name: Xperia XZ1 Compact
+    brand: SONY
+    screenSize: 4.6
+    pictureResolution: 19
+    memory: 32
+    processor: Snapdragon 835
+-
+    name: Huawei P20
+    brand: Huawei
+    screenSize: 5.84
+    pictureResolution: 16
+    memory: 64
+    processor: Qualcomm OctaCore 3 Go de Ram    
+-
+    name: Iphone 6
+    brand: Apple
+    screenSize: 4.7
+    pictureResolution: 24
+    memory: 64
+    processor: iOS 10 
+-
+    name: Galaxy S7
+    brand: Samsung
+    screenSize: 5.2
+    pictureResolution: 20
+    memory: 32
+    processor: Quad-Core 1.3Ghz
+-
+    name: Lubi 4
+    brand: Wiko
+    screenSize: 1.77
+    pictureResolution: null
+    memory: 32
+    processor: Dual-Core 1Ghz
