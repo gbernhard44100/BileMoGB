@@ -1,4 +1,12 @@
 services:
-#    gb_bile_mo.example:
-#        class: GB\BileMoBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+    
+    GB\BileMoBundle\Controller\BileMoController:
+        tags: 
+            - 'controller.service_arguments'
+            - 'fos_rest.exception.twig_controller'
+
+    

@@ -2,5 +2,8 @@ gb_bile_mo:
     resource: "@GBBileMoBundle/Controller/"
     type:     annotation
     prefix:   /
+    
+api_login_check:
+    path: /login_check
 
 

@@ -3,6 +3,8 @@
 namespace GB\BileMoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -18,6 +20,7 @@ class User
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"GET_USERS", "GET_USER_DETAIL"})
      */
     private $id;
 
@@ -25,6 +28,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="firstName", type="string", length=255)
+     * @Assert\NotBlank
+     * @Groups({"GET_USERS", "GET_USER_DETAIL"})
      */
     private $firstName;
 
@@ -32,6 +37,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="lastName", type="string", length=255)
+     * @Assert\NotBlank
+     * @Groups({"GET_USERS", "GET_USER_DETAIL"})
      */
     private $lastName;
 
@@ -39,38 +46,46 @@ class User
      * @var string
      *
      * @ORM\Column(name="phoneNumber", type="string", length=255)
+     * @Groups({"GET_USER_DETAIL"})
      */
     private $phoneNumber;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="gender", type="string", length=1)
+     * @Assert\Regex(
+     *     pattern="/^(M|F)$/i",
+     *     match=true,
+     *     message="The gender has to be noted M (for Male) or F (for Female)"
+     * )
+     * @Groups({"GET_USER_DETAIL"})
      */
     private $gender;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Groups({"GET_USER_DETAIL"})
      */
     private $email;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="address", type="string", length=255)
+     * @Groups({"GET_USER_DETAIL"})
      */
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Store")
+     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Store", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
     
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Phone")
+     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Phone", inversedBy="users")
      * @ORM\JoinColumn(nullable=true)
      */
     private $phone;

@@ -64,13 +64,13 @@ class User
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Store")
+     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Store", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
     
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Phone")
+     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Phone", inversedBy="users")
      * @ORM\JoinColumn(nullable=true)
      */
     private $phone;
@@ -228,5 +228,52 @@ class User
     {
         return $this->address;
     }
-}
 
+    /**
+     * Set store
+     *
+     * @param \GB\BileMoBundle\Entity\Store $store
+     *
+     * @return User
+     */
+    public function setStore(\GB\BileMoBundle\Entity\Store $store)
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    /**
+     * Get store
+     *
+     * @return \GB\BileMoBundle\Entity\Store
+     */
+    public function getStore()
+    {
+        return $this->store;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param \GB\BileMoBundle\Entity\Phone $phone
+     *
+     * @return User
+     */
+    public function setPhone(\GB\BileMoBundle\Entity\Phone $phone = null)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return \GB\BileMoBundle\Entity\Phone
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+}
