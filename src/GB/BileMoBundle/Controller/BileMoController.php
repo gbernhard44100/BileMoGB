@@ -136,7 +136,12 @@ class BileMoController extends FOSRestController
      * 
      */
     public function deleteUser(User $user){
-        $this->em->remove($user);
-        $this->em->flush();
+        if($user->getStore() == $this->getUser()){
+            $this->em->remove($user);
+            $this->em->flush();
+        }
+        else{
+            throw new AccessDeniedException('You are not allowed to suppress this user.');
+        }
     }
 }
