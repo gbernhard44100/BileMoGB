@@ -66,6 +66,7 @@ class User
      * @var string
      * @Assert\NotBlank
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Assert\Email(message = "'{{ value }}' is not a valid email.")
      * @Groups({"GET_USER_DETAIL"})
      */
     private $email;

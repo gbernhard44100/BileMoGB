@@ -3,6 +3,7 @@
 namespace GB\BileMoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Store
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="store")
  * @ORM\Entity(repositoryClass="GB\BileMoBundle\Repository\StoreRepository")
  */
-class Store
+class Store implements UserInterface
 {
     /**
      * @var int
@@ -48,13 +49,6 @@ class Store
      * @ORM\Column(name="password", type="string", length=255)
      */    
     private $password;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="jwttoken", type="string", length=255, unique=true)
-     */    
-    private $jwtToken;
     
     /**
      * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\User", mappedBy="store")
@@ -185,26 +179,66 @@ class Store
     }
 
     /**
-     * Set jwtToken
+     * Set userName
      *
-     * @param string $jwtToken
+     * @param string $userName
      *
      * @return Store
      */
-    public function setJwtToken($jwtToken)
+    public function setUserName($userName)
     {
-        $this->jwtToken = $jwtToken;
+        $this->userName = $userName;
 
         return $this;
     }
 
     /**
-     * Get jwtToken
+     * Get userName
      *
      * @return string
      */
-    public function getJwtToken()
+    public function getUserName()
     {
-        return $this->jwtToken;
+        return $this->userName;
+    }
+
+    /**
+     * Set storeName
+     *
+     * @param string $storeName
+     *
+     * @return Store
+     */
+    public function setStoreName($storeName)
+    {
+        $this->storeName = $storeName;
+
+        return $this;
+    }
+
+    /**
+     * Get storeName
+     *
+     * @return string
+     */
+    public function getStoreName()
+    {
+        return $this->storeName;
+    }
+    
+    public function getRoles()
+    {
+        return array('IS_AUTHENTICATED_FULLY');
+    }
+    
+    public function getSalt()
+    {
+        // you *may* need a real salt depending on your encoder
+        // see section on salt below
+        return null;
+    }
+    
+    public function eraseCredentials()
+    {
     }
 }

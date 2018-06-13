@@ -16,12 +16,9 @@ use GB\BileMoBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Symfony\Component\HttpFoundation\Response;
-use GB\BileMoBundle\Exception\RequestValidationException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-use \Firebase\JWT\JWT;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class BileMoController extends FOSRestController
 {
@@ -61,8 +58,6 @@ class BileMoController extends FOSRestController
      * 
      */
     public function phoneDetailAction(Phone $phone){        
-        die;
-        throw new NotFoundHttpException('L\'id du téléphone est incorrect.');
         return $phone;
     }
     
@@ -78,7 +73,7 @@ class BileMoController extends FOSRestController
      * )
      */
     public function usersFromStoreAction(){
-        $users = $this->em->getRepository("GBBileMoBundle:User")->findAll();
+        $users = $this->em->getRepository("GBBileMoBundle:User")->findByStore($this->getUser());
         return $users;  
     }
     
@@ -94,7 +89,12 @@ class BileMoController extends FOSRestController
      * )
      */
     public function userDetailAction(User $user){
-        return $user;
+        if($user->getStore() == $this->getUser()){
+            return $user;
+        }
+        else{
+            throw new AccessDeniedException('You are not allowed to have access to this user.');
+        }
     }
     
     /**
@@ -112,9 +112,14 @@ class BileMoController extends FOSRestController
      */
     public function createUser(User $user, ConstraintViolationListInterface $violations){
         if (count($violations)) {
-            return $this->view($violations, Response::HTTP_BAD_REQUEST);
+            $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
+            foreach ($violations as $violation) {
+                $message .= sprintf("Field %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
+            }
+            return $this->view($message, Response::HTTP_BAD_REQUEST);
         }
-        /**$user->setStore($store);*/
+        $user->setStore($this->getUser());
+        
         $this->em->persist($user);
         $this->em->flush();
         return $user;        
@@ -123,19 +128,15 @@ class BileMoController extends FOSRestController
     /**
      * 
      * @Rest\Delete(
-     *      path = "/stores/{id}/users/{user_id}",
+     *      path = "users/{id}",
      *      name = "gb_bilemo_user_delete",
-     *      requirements = {"id"="\d+", "user_id"="\d+"},
+     *      requirements = {"id"="\d+"},
      * )
      * @Rest\View(statusCode = 204)
      * 
      */
-    public function deleteUser(Store $store, $user_id){
-        $users = $this->em->getRepository("GBBileMoBundle:User")->findByStore($store);
-        if ($users[$user_id]){
-            $user =$users[$user_id];
-            $this->em->remove($user);
-            $this->em->flush();
-        }
+    public function deleteUser(User $user){
+        $this->em->remove($user);
+        $this->em->flush();
     }
 }

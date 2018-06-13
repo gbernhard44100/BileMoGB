@@ -49,13 +49,6 @@ class Store implements UserInterface
      * @ORM\Column(name="password", type="string", length=255)
      */    
     private $password;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="jwttoken", type="string", length=255, unique=true)
-     */    
-    private $jwtToken;
     
     /**
      * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\User", mappedBy="store")
@@ -183,30 +176,6 @@ class Store implements UserInterface
     public function getPassword()
     {
         return $this->password;
-    }
-
-    /**
-     * Set jwtToken
-     *
-     * @param string $jwtToken
-     *
-     * @return Store
-     */
-    public function setJwtToken($jwtToken)
-    {
-        $this->jwtToken = $jwtToken;
-
-        return $this;
-    }
-
-    /**
-     * Get jwtToken
-     *
-     * @return string
-     */
-    public function getJwtToken()
-    {
-        return $this->jwtToken;
     }
 
     /**
