@@ -6,4 +6,7 @@ gb_bile_mo:
 api_login_check:
     path: /login_check
 
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
+    prefix:   /doc
 

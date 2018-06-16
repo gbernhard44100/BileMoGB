@@ -58,7 +58,9 @@ class BileMoController extends FOSRestController
      * 
      */
     public function phoneDetailAction(Phone $phone){        
-        return $phone;
+        $phonejson = json_encode($phone);
+        var_dump($phonejson);die;
+        return $phonejson;
     }
     
     /**
@@ -73,7 +75,7 @@ class BileMoController extends FOSRestController
      * )
      */
     public function usersFromStoreAction(){
-        $users = $this->em->getRepository("GBBileMoBundle:User")->findByStore($this->getUser());
+        $users = $this->em->getRepository("GBBileMoBundle:User")->findByStore($this->getUser());        
         return $users;  
     }
     
