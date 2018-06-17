@@ -3,16 +3,16 @@
 namespace GB\BileMoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * User
+ * Customer
  *
- * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="GB\BileMoBundle\Repository\UserRepository")
+ * @ORM\Table(name="customer")
+ * @ORM\Entity(repositoryClass="GB\BileMoBundle\Repository\CustomerRepository")
  */
-class User
+class Customer
 {
     /**
      * @var int
@@ -20,35 +20,35 @@ class User
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"GET_USERS", "GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="firstName", type="string", length=255)
+     * @ORM\Column(name="firstname", type="string", length=255)
      * @Assert\NotBlank
-     * @Groups({"GET_USERS", "GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
-    private $firstName;
+    private $firstname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastName", type="string", length=255)
+     * @ORM\Column(name="lastname", type="string", length=255)
      * @Assert\NotBlank
-     * @Groups({"GET_USERS", "GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
-    private $lastName;
+    private $lastname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phoneNumber", type="string", length=255)
-     * @Groups({"GET_USER_DETAIL"})
+     * @ORM\Column(name="phonenumber", type="string", length=255)
+     * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
-    private $phoneNumber;
+    private $phonenumber;
 
     /**
      * @var string
@@ -58,7 +58,7 @@ class User
      *     match=true,
      *     message="The gender has to be noted M (for Male) or F (for Female)"
      * )
-     * @Groups({"GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
     private $gender;
 
@@ -67,7 +67,7 @@ class User
      * @Assert\NotBlank
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      * @Assert\Email(message = "'{{ value }}' is not a valid email.")
-     * @Groups({"GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
     private $email;
 
@@ -75,18 +75,18 @@ class User
      * @var string
      * @Assert\NotBlank
      * @ORM\Column(name="address", type="string", length=255)
-     * @Groups({"GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Store", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Store", inversedBy="customers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
     
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Phone", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Phone", inversedBy="customers")
      * @ORM\JoinColumn(nullable=true)
      */
     private $phone;
@@ -102,63 +102,63 @@ class User
     }
 
     /**
-     * Set firstName
+     * Set firstname
      *
-     * @param string $firstName
+     * @param string $firstname
      *
-     * @return User
+     * @return Customer
      */
-    public function setFirstName($firstName)
+    public function setFirstname($firstname)
     {
-        $this->firstName = $firstName;
+        $this->firstname = $firstname;
 
         return $this;
     }
 
     /**
-     * Get firstName
+     * Get firstname
      *
      * @return string
      */
-    public function getFirstName()
+    public function getFirstname()
     {
-        return $this->firstName;
+        return $this->firstname;
     }
 
     /**
-     * Set lastName
+     * Set lastname
      *
-     * @param string $lastName
+     * @param string $lastname
      *
-     * @return User
+     * @return Customer
      */
-    public function setLastName($lastName)
+    public function setLastname($lastname)
     {
-        $this->lastName = $lastName;
+        $this->lastname = $lastname;
 
         return $this;
     }
 
     /**
-     * Get lastName
+     * Get lastname
      *
      * @return string
      */
-    public function getLastName()
+    public function getLastname()
     {
-        return $this->lastName;
+        return $this->lastname;
     }
 
     /**
      * Set phoneNumber
      *
-     * @param string $phoneNumber
+     * @param string $phonenumber
      *
-     * @return User
+     * @return Customer
      */
-    public function setPhoneNumber($phoneNumber)
+    public function setPhonenumber($phonenumber)
     {
-        $this->phoneNumber = $phoneNumber;
+        $this->phonenumber = $phonenumber;
 
         return $this;
     }
@@ -168,9 +168,9 @@ class User
      *
      * @return string
      */
-    public function getPhoneNumber()
+    public function getPhonenumber()
     {
-        return $this->phoneNumber;
+        return $this->phonenumber;
     }
 
     /**
@@ -178,7 +178,7 @@ class User
      *
      * @param string $gender
      *
-     * @return User
+     * @return Customer
      */
     public function setGender($gender)
     {
@@ -202,7 +202,7 @@ class User
      *
      * @param string $email
      *
-     * @return User
+     * @return Customer
      */
     public function setEmail($email)
     {
@@ -226,7 +226,7 @@ class User
      *
      * @param string $address
      *
-     * @return User
+     * @return Customer
      */
     public function setAddress($address)
     {
@@ -250,7 +250,7 @@ class User
      *
      * @param \GB\BileMoBundle\Entity\Store $store
      *
-     * @return User
+     * @return Customer
      */
     public function setStore(\GB\BileMoBundle\Entity\Store $store)
     {
@@ -274,7 +274,7 @@ class User
      *
      * @param \GB\BileMoBundle\Entity\Phone $phone
      *
-     * @return User
+     * @return Customer
      */
     public function setPhone(\GB\BileMoBundle\Entity\Phone $phone = null)
     {

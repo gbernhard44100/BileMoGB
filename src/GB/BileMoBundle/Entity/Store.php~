@@ -51,9 +51,9 @@ class Store implements UserInterface
     private $password;
     
     /**
-     * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\User", mappedBy="store")
+     * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\Customer", mappedBy="store")
      */
-    private $users;
+    private $customers;
 
     /**
      * Get id

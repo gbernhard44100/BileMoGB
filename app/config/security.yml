@@ -29,7 +29,7 @@ security:
             pattern: ^/doc
             security: false        
         main:
-            pattern:   ^/users
+            pattern:   ^/customers
             provider: store
             stateless: true
             guard:

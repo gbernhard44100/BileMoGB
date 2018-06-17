@@ -3,7 +3,7 @@
 namespace GB\BileMoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Phone
@@ -19,49 +19,49 @@ class Phone
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"PHONE_GET", "PHONE_DETAIL_GET"})
+     * @Serializer\Groups({"PHONE_GET", "PHONE_DETAIL_GET"})
      */
     private $id;
 
     /**
      * @var string
-     * @Groups({"PHONE_GET", "PHONE_DETAIL_GET"})
+     * @Serializer\Groups({"PHONE_GET", "PHONE_DETAIL_GET"})
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
 
     /**
      * @var string
-     * @Groups({"PHONE_DETAIL_GET"})
+     * @Serializer\Groups({"PHONE_DETAIL_GET"})
      * @ORM\Column(name="brand", type="string", length=255)
      */
     private $brand;
 
     /**
      * @var string
-     * @Groups({"PHONE_DETAIL_GET"})
+     * @Serializer\Groups({"PHONE_DETAIL_GET"})
      * @ORM\Column(name="screenSize", type="decimal", precision=3, scale=2)
      */
     private $screenSize;
 
     /**
      * @var int
-     * @Groups({"PHONE_DETAIL_GET"})
+     * @Serializer\Groups({"PHONE_DETAIL_GET"})
      * @ORM\Column(name="pictureResolution", type="smallint", nullable=true)
      */
     private $pictureResolution;
 
     /**
      * @var string
-     * @Groups({"PHONE_DETAIL_GET"})
+     * @Serializer\Groups({"PHONE_DETAIL_GET"})
      * @ORM\Column(name="processor", type="string", length=255)
      */
     private $processor;
 
     /**
-     * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\User", mappedBy="phone")
+     * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\Customer", mappedBy="phone")
      */
-    private $users;
+    private $customers;
 
     /**
      * Get id
@@ -201,36 +201,36 @@ class Phone
     }
 
     /**
-     * Add user
+     * Add customer
      *
-     * @param \GB\BileMoBundle\Entity\User $user
+     * @param \GB\BileMoBundle\Entity\Customer $customer
      *
      * @return Phone
      */
-    public function addUser(\GB\BileMoBundle\Entity\User $user)
+    public function addCustomer(\GB\BileMoBundle\Entity\Customer $customer)
     {
-        $this->users->add($user);
+        $this->customers[] = $customer;
 
         return $this;
     }
 
     /**
-     * Remove user
+     * Remove customer
      *
-     * @param \GB\BileMoBundle\Entity\User $user
+     * @param \GB\BileMoBundle\Entity\Customer $customer
      */
-    public function removeUser(\GB\BileMoBundle\Entity\User $user)
+    public function removeCustomer(\GB\BileMoBundle\Entity\Customer $customer)
     {
-        $this->users->removeElement($user);
+        $this->customers->removeElement($customer);
     }
 
     /**
-     * Get users
+     * Get customers
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUsers()
+    public function getCustomers()
     {
-        return $this->users;
+        return $this->customers;
     }
 }

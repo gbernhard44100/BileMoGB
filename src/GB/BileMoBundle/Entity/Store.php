@@ -51,9 +51,9 @@ class Store implements UserInterface
     private $password;
     
     /**
-     * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\User", mappedBy="store")
+     * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\Customer", mappedBy="store")
      */
-    private $users;
+    private $customers;
 
     /**
      * Get id
@@ -118,40 +118,6 @@ class Store implements UserInterface
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add user
-     *
-     * @param \GB\BileMoBundle\Entity\User $user
-     *
-     * @return Store
-     */
-    public function addUser(\GB\BileMoBundle\Entity\User $user)
-    {
-        $this->users[] = $user;
-
-        return $this;
-    }
-
-    /**
-     * Remove user
-     *
-     * @param \GB\BileMoBundle\Entity\User $user
-     */
-    public function removeUser(\GB\BileMoBundle\Entity\User $user)
-    {
-        $this->users->removeElement($user);
-    }
-
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUsers()
-    {
-        return $this->users;
     }
 
     /**
@@ -240,5 +206,39 @@ class Store implements UserInterface
     
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * Add customer
+     *
+     * @param \GB\BileMoBundle\Entity\Customer $customer
+     *
+     * @return Store
+     */
+    public function addCustomer(\GB\BileMoBundle\Entity\Customer $customer)
+    {
+        $this->customers[] = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Remove customer
+     *
+     * @param \GB\BileMoBundle\Entity\Customer $customer
+     */
+    public function removeCustomer(\GB\BileMoBundle\Entity\Customer $customer)
+    {
+        $this->customers->removeElement($customer);
+    }
+
+    /**
+     * Get customers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCustomers()
+    {
+        return $this->customers;
     }
 }

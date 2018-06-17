@@ -11,14 +11,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use GB\BileMoBundle\Entity\Phone;
 use GB\BileMoBundle\Entity\Store;
-use GB\BileMoBundle\Entity\User;
+use GB\BileMoBundle\Entity\Customer;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\View\View;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+use Hateoas\Configuration\Annotation as Hateoas;
 
 class BileMoController extends FOSRestController
 {
@@ -58,61 +61,59 @@ class BileMoController extends FOSRestController
      * 
      */
     public function phoneDetailAction(Phone $phone){        
-        $phonejson = json_encode($phone);
-        var_dump($phonejson);die;
-        return $phonejson;
+        return $phone;
     }
     
     /**
      * @Rest\Get(
-     *      path = "/users",
-     *      name = "gb_bilemo_users",
+     *      path = "/customers",
+     *      name = "gb_bilemo_customers",
      *      requirements = {"id"="\d+"}
      * )
      * @Rest\View(
      *      statusCode = 200,
-     *      serializerGroups = {"GET_USERS"}
+     *      serializerGroups = {"GET_CUSTOMERS"}
      * )
      */
-    public function usersFromStoreAction(){
-        $users = $this->em->getRepository("GBBileMoBundle:User")->findByStore($this->getUser());        
-        return $users;  
+    public function customersFromStoreAction(){
+        $customers = $this->em->getRepository("GBBileMoBundle:Customer")->findByStore($this->getUser());
+        return $customers;  
     }
     
     /**
      * @Rest\Get(
-     *      path = "/users/{id}",
-     *      name = "gb_bilemo_user_detail",
+     *      path = "/customers/{id}",
+     *      name = "gb_bilemo_customer_detail",
      *      requirements = {"id"="\d+"}
      * )
      * @Rest\View(
      *      statusCode = 200,
-     *      serializerGroups = {"GET_USER_DETAIL"}
+     *      serializerGroups = {"GET_CUSTOMER_DETAIL"}
      * )
      */
-    public function userDetailAction(User $user){
-        if($user->getStore() == $this->getUser()){
-            return $user;
+    public function customerDetailAction(Customer $customer){
+        if($customer->getStore() == $this->getUser()){
+            return $customer;
         }
         else{
-            throw new AccessDeniedException('You are not allowed to have access to this user.');
+            throw new AccessDeniedException('You are not allowed to have access to this customer.');
         }
     }
     
     /**
      * 
      * @Rest\Post(
-     *      path = "users",
-     *      name = "gb_bilemo_user_create",
+     *      path = "customers",
+     *      name = "gb_bilemo_customer_create",
      * )
      * @Rest\View(
-     * statusCode = 201,
-     * serializerGroups = {"GET_USER_DETAIL"}
+     *      statusCode = 201,
+     *      serializerGroups = {"GET_CUSTOMER_DETAIL"}
      * )
-     * @ParamConverter("user", converter="fos_rest.request_body")
+     * @ParamConverter("customer", converter="fos_rest.request_body")
      * 
      */
-    public function createUser(User $user, ConstraintViolationListInterface $violations){
+    public function createCustomer(Customer $customer, ConstraintViolationListInterface $violations){
         if (count($violations)) {
             $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
             foreach ($violations as $violation) {
@@ -120,30 +121,30 @@ class BileMoController extends FOSRestController
             }
             return $this->view($message, Response::HTTP_BAD_REQUEST);
         }
-        $user->setStore($this->getUser());
+        $customer->setStore($this->getUser());
         
-        $this->em->persist($user);
+        $this->em->persist($customer);
         $this->em->flush();
-        return $user;        
+        return $customer;        
     }
     
     /**
      * 
      * @Rest\Delete(
-     *      path = "users/{id}",
-     *      name = "gb_bilemo_user_delete",
+     *      path = "customers/{id}",
+     *      name = "gb_bilemo_customer_delete",
      *      requirements = {"id"="\d+"},
      * )
-     * @Rest\View(statusCode = 204)
-     * 
      */
-    public function deleteUser(User $user){
-        if($user->getStore() == $this->getUser()){
-            $this->em->remove($user);
+    public function deleteCustomer(Customer $customer){
+        if($customer->getStore() == $this->getUser()){
+            $message = 'The customer '.$customer->getFirstName().' '.$customer->getLastName().' has been properly deleted from the database.';
+            $this->em->remove($customer);
             $this->em->flush();
+            return $this->view($message, Response::HTTP_RESET_CONTENT);
         }
         else{
-            throw new AccessDeniedException('You are not allowed to suppress this user.');
+            throw new AccessDeniedException('You are not allowed to suppress this customer.');
         }
     }
 }
