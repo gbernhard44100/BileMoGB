@@ -24,9 +24,9 @@ class LoadCustomer implements FixtureInterface, DependentFixtureInterface
         
         foreach ($customers as $customer) {
             $customerToPersist = new Customer();
-            $customerToPersist->setFirstname($customer['first_name']);
-            $customerToPersist->setLastname($customer['last_name']);
-            $customerToPersist->setPhonenumber($customer['phoneNumber']);
+            $customerToPersist->setFirstName($customer['first_name']);
+            $customerToPersist->setLastName($customer['last_name']);
+            $customerToPersist->setPhoneNumber($customer['phoneNumber']);
             $customerToPersist->setGender($customer['gender']);
             $customerToPersist->setAddress($customer['address']);
             $customerToPersist->setEmail($customer['email']);

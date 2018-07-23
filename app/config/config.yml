@@ -30,7 +30,10 @@ framework:
     assets: ~
     php_errors:
         log: true
-    serializer: { enable_annotations: true }
+    serializer:
+        enabled: false
+    templating:
+        engines: ['twig']
 
 # Twig Configuration
 twig:
@@ -79,7 +82,7 @@ fos_rest:
         formats: { json: true, xml: false, rss: false }
         view_response_listener: true
     serializer:
-        serialize_null: true
+        serialize_null:  true
     format_listener:
         rules:
             - { path: '^/', priorities: ['json'], fallback_format: 'json' }
@@ -98,3 +101,14 @@ lexik_jwt_authentication:
     token_ttl:        '%jwt_token_ttl%'
 
 nelmio_api_doc: ~
+
+bazinga_hateoas:
+    metadata:
+        cache:                file
+        file_cache:
+            dir:              %kernel.cache_dir%/hateoas
+    serializer:
+        json: hateoas.serializer.json_hal
+        xml: hateoas.serializer.xml
+    twig_extension:
+        enabled: true

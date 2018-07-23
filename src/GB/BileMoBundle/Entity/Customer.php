@@ -5,15 +5,32 @@ namespace GB\BileMoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Customer
  *
  * @ORM\Table(name="customer")
  * @ORM\Entity(repositoryClass="GB\BileMoBundle\Repository\CustomerRepository")
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route("gb_bilemo_customer_detail", parameters = { "id" = "expr(object.getId())" }),
+ *      exclusion = @Hateoas\Exclusion({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
+ * )
+ * @Hateoas\Relation(
+ *      "suppress",
+ *      href = @Hateoas\Route("gb_bilemo_customer_delete", parameters = { "id" = "expr(object.getId())" }),
+ *      exclusion = @Hateoas\Exclusion({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
+ * )
+ * @Hateoas\Relation(
+ *      "phone",
+ *      embedded = @Hateoas\Embedded("expr(object.getPhone())"),
+ *      exclusion = @Hateoas\Exclusion({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"}),
+ * )
  */
 class Customer
 {
+
     /**
      * @var int
      *
@@ -27,28 +44,28 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=255)
+     * @ORM\Column(name="firstName", type="string", length=255)
      * @Assert\NotBlank
      * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
-    private $firstname;
+    private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=255)
+     * @ORM\Column(name="lastName", type="string", length=255)
      * @Assert\NotBlank
      * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
-    private $lastname;
+    private $lastName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phonenumber", type="string", length=255)
+     * @ORM\Column(name="phoneNumber", type="string", length=255)
      * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
-    private $phonenumber;
+    private $phoneNumber;
 
     /**
      * @var string
@@ -84,10 +101,11 @@ class Customer
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Phone", inversedBy="customers")
      * @ORM\JoinColumn(nullable=true)
+     * @Serializer\Groups({"GET_CUSTOMER_PHONE"})
      */
     private $phone;
 
@@ -102,63 +120,63 @@ class Customer
     }
 
     /**
-     * Set firstname
+     * Set firstName
      *
-     * @param string $firstname
+     * @param string $firstName
      *
      * @return Customer
      */
-    public function setFirstname($firstname)
+    public function setFirstName($firstName)
     {
-        $this->firstname = $firstname;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
     /**
-     * Get firstname
+     * Get firstName
      *
      * @return string
      */
-    public function getFirstname()
+    public function getFirstName()
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
     /**
-     * Set lastname
+     * Set lastName
      *
-     * @param string $lastname
+     * @param string $lastName
      *
      * @return Customer
      */
-    public function setLastname($lastname)
+    public function setLastName($lastName)
     {
-        $this->lastname = $lastname;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     /**
-     * Get lastname
+     * Get lastName
      *
      * @return string
      */
-    public function getLastname()
+    public function getLastName()
     {
-        return $this->lastname;
+        return $this->lastName;
     }
 
     /**
      * Set phoneNumber
      *
-     * @param string $phonenumber
+     * @param string $phoneNumber
      *
      * @return Customer
      */
-    public function setPhonenumber($phonenumber)
+    public function setPhoneNumber($phoneNumber)
     {
-        $this->phonenumber = $phonenumber;
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
@@ -168,9 +186,9 @@ class Customer
      *
      * @return string
      */
-    public function getPhonenumber()
+    public function getPhoneNumber()
     {
-        return $this->phonenumber;
+        return $this->phoneNumber;
     }
 
     /**
@@ -292,4 +310,5 @@ class Customer
     {
         return $this->phone;
     }
+
 }

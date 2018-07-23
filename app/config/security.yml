@@ -26,10 +26,10 @@ security:
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
         api_doc:
-            pattern: ^/doc
+            pattern: ^api/doc
             security: false        
         main:
-            pattern:   ^/customers
+            pattern:   ^/(customers|phones)
             provider: store
             stateless: true
             guard:

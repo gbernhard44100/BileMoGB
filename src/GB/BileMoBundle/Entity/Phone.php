@@ -4,12 +4,19 @@ namespace GB\BileMoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Phone
  *
  * @ORM\Table(name="phone")
  * @ORM\Entity(repositoryClass="GB\BileMoBundle\Repository\PhoneRepository")
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route("gb_bilemo_phone_detail", parameters = { "id" = "expr(object.getId())" }),
+ *      exclusion = @Hateoas\Exclusion({"PHONE_GET", "PHONE_DETAIL_GET"})
+ * )
+ * 
  */
 class Phone
 {
@@ -20,6 +27,8 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Serializer\Groups({"PHONE_GET", "PHONE_DETAIL_GET"})
+     * 
+     * 
      */
     private $id;
 
