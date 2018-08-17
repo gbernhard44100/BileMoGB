@@ -1,19 +1,23 @@
 <?php
 
-namespace GB\BileMoBundle\Entity;
+namespace AppBundle\Entity;
 
+use AppBundle\Entity\Customer;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Phone
  *
  * @ORM\Table(name="phone")
- * @ORM\Entity(repositoryClass="GB\BileMoBundle\Repository\PhoneRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PhoneRepository")
  * @Hateoas\Relation(
  *      "self",
- *      href = @Hateoas\Route("gb_bilemo_phone_detail", parameters = { "id" = "expr(object.getId())" }),
+ *      href = @Hateoas\Route(
+ *          "gb_bilemo_phone_detail",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      ),
  *      exclusion = @Hateoas\Exclusion({"PHONE_GET", "PHONE_DETAIL_GET"})
  * )
  * 
@@ -68,7 +72,7 @@ class Phone
     private $processor;
 
     /**
-     * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\Customer", mappedBy="phone")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Customer", mappedBy="phone")
      */
     private $customers;
 
@@ -212,11 +216,11 @@ class Phone
     /**
      * Add customer
      *
-     * @param \GB\BileMoBundle\Entity\Customer $customer
+     * @param Customer $customer
      *
      * @return Phone
      */
-    public function addCustomer(\GB\BileMoBundle\Entity\Customer $customer)
+    public function addCustomer(Customer $customer)
     {
         $this->customers[] = $customer;
 
@@ -226,9 +230,9 @@ class Phone
     /**
      * Remove customer
      *
-     * @param \GB\BileMoBundle\Entity\Customer $customer
+     * @param Customer $customer
      */
-    public function removeCustomer(\GB\BileMoBundle\Entity\Customer $customer)
+    public function removeCustomer(Customer $customer)
     {
         $this->customers->removeElement($customer);
     }

@@ -1,14 +1,13 @@
 <?php
-// src/GB/BileMoBundle/DataFixtures/ORM/LoadPhone.php
 
-namespace GB\BileMoBundle\DataFixtures\ORM;
+namespace AppBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use AppBundle\Entity\Phone;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use GB\BileMoBundle\Entity\Phone;
 use Symfony\Component\Yaml\Yaml;
 
-class LoadPhone implements FixtureInterface
+class LoadPhone extends Fixture
 {
     public function load(ObjectManager $manager)
     {
@@ -23,8 +22,7 @@ class LoadPhone implements FixtureInterface
             $phoneToPersist->setProcessor($phone['processor']);
 
             $manager->persist($phoneToPersist);
-        }
-        
+        }        
         $manager->flush();
     }
 }

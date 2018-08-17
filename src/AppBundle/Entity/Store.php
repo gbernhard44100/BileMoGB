@@ -1,7 +1,8 @@
 <?php
 
-namespace GB\BileMoBundle\Entity;
+namespace AppBundle\Entity;
 
+use AppBundle\Entity\Customer;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -9,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Store
  *
  * @ORM\Table(name="store")
- * @ORM\Entity(repositoryClass="GB\BileMoBundle\Repository\StoreRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\StoreRepository")
  */
 class Store implements UserInterface
 {
@@ -51,7 +52,7 @@ class Store implements UserInterface
     private $password;
     
     /**
-     * @ORM\OneToMany(targetEntity="GB\BileMoBundle\Entity\Customer", mappedBy="store")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Customer", mappedBy="store")
      */
     private $customers;
 
@@ -194,7 +195,7 @@ class Store implements UserInterface
     
     public function getRoles()
     {
-        return array('IS_AUTHENTICATED_FULLY');
+        return array('ROLE_USER');
     }
     
     public function getSalt()
@@ -211,11 +212,11 @@ class Store implements UserInterface
     /**
      * Add customer
      *
-     * @param \GB\BileMoBundle\Entity\Customer $customer
+     * @param Customer $customer
      *
      * @return Store
      */
-    public function addCustomer(\GB\BileMoBundle\Entity\Customer $customer)
+    public function addCustomer(Customer $customer)
     {
         $this->customers[] = $customer;
 
@@ -225,9 +226,9 @@ class Store implements UserInterface
     /**
      * Remove customer
      *
-     * @param \GB\BileMoBundle\Entity\Customer $customer
+     * @param Customer $customer
      */
-    public function removeCustomer(\GB\BileMoBundle\Entity\Customer $customer)
+    public function removeCustomer(Customer $customer)
     {
         $this->customers->removeElement($customer);
     }

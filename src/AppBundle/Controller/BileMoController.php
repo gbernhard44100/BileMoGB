@@ -1,22 +1,20 @@
 <?php
 
-namespace GB\BileMoBundle\Controller;
+namespace AppBundle\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use AppBundle\Entity\Phone;
+use AppBundle\Entity\Customer;
 use Doctrine\ORM\EntityManagerInterface;
-use GB\BileMoBundle\Entity\Phone;
-use GB\BileMoBundle\Entity\Customer;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Hateoas\Configuration\Annotation as Hateoas;
 use Nelmio\ApiDocBundle\Annotation as Doc;
-
-use FOS\RestBundle\Controller\Annotations\RequestParam;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class BileMoController extends FOSRestController
 {
@@ -44,7 +42,8 @@ class BileMoController extends FOSRestController
      *         {
      *             "name"="Token",
      *             "required"="true",
-     *             "description"="JWT Token provided once logged in (POST request with username and password by using the Route /login_check)."
+     *             "description"="JWT Token provided once logged in 
+     *                  (POST request with username and password by using the Route /login_check)."
      *         }
      *      },
      *      statusCodes={
@@ -55,7 +54,7 @@ class BileMoController extends FOSRestController
      */
     public function phonesAction()
     {
-        $phones = $this->em->getRepository("GBBileMoBundle:Phone")->findAll();
+        $phones = $this->em->getRepository(Phone::class)->findAll();
         return $phones;
     }
 
@@ -85,7 +84,8 @@ class BileMoController extends FOSRestController
      *         {
      *             "name"="Token",
      *             "required"="true",
-     *             "description"="JWT Token provided once logged in (POST request with username and password by using the Route /login_check)."
+     *             "description"="JWT Token provided once logged in 
+     *                  (POST request with username and password by using the Route /login_check)."
      *         }
      *      },
      *      statusCodes={
@@ -116,7 +116,8 @@ class BileMoController extends FOSRestController
      *         {
      *             "name"="Token",
      *             "required"="true",
-     *             "description"="JWT Token provided once logged in (POST request with username and password by using the Route /login_check)."
+     *             "description"="JWT Token provided once logged in 
+     *                  (POST request with username and password by using the Route /login_check)."
      *         }
      *      },
      *      statusCodes={
@@ -127,7 +128,7 @@ class BileMoController extends FOSRestController
      */
     public function customersFromStoreAction()
     {
-        $customers = $this->em->getRepository("GBBileMoBundle:Customer")->findByStore($this->getUser());
+        $customers = $this->em->getRepository(Customer::class)->findByStore($this->getUser());
         return $customers;
     }
 
@@ -138,7 +139,7 @@ class BileMoController extends FOSRestController
      *      requirements = {"id"="\d+"}
      * )
      * @Rest\View(
-     *      statusCode = 200,
+     *      statusCode = 201,
      *      serializerGroups = {"GET_CUSTOMER_DETAIL", "PHONE_GET"}
      * )
      * @Doc\ApiDoc(
@@ -163,7 +164,8 @@ class BileMoController extends FOSRestController
      *         {
      *             "name"="Token",
      *             "required"="true",
-     *             "description"="JWT Token provided once logged in (POST request with username and password by using the Route /login_check)."
+     *             "description"="JWT Token provided once logged in 
+     *                  (POST request with username and password by using the Route /login_check)."
      *         }
      *     }
      * )
@@ -185,10 +187,10 @@ class BileMoController extends FOSRestController
      * )
      * @Rest\View(
      *      statusCode = 201,
-     *      serializerGroups = {"GET_CUSTOMER_DETAIL"}
+     *      serializerGroups = {"GET_CUSTOMER_DETAIL", "PHONE_GET"}
      * )
-     * @ParamConverter("customer", converter="fos_rest.request_body",
-     *      options={"deserializationContext"={"groups"={"GET_CUSTOMER_DETAIL", "GET_CUSTOMER_PHONE"}, "version"="1.0"}})
+     * @ParamConverter("customer", converter="fos_rest.request_body", 
+     * options={"deserializationContext"={"groups"={"GET_CUSTOMER_DETAIL"}, "version"="1.0"}})
      * @Doc\ApiDoc(
      *      section = "Customer",
      *      resource = true,
@@ -202,7 +204,8 @@ class BileMoController extends FOSRestController
      *         {
      *             "name"="Token",
      *             "required"="true",
-     *             "description"="JWT Token provided once logged in (POST request with username and password by using the Route /login_check)."
+     *             "description"="JWT Token provided once logged in 
+     *                  (POST request with username and password by using the Route /login_check)."
      *         },
      *         {
      *             "name"="Content-Type",
@@ -211,7 +214,7 @@ class BileMoController extends FOSRestController
      *      },
      * )
      */
-    public function createCustomer(Customer $customer, ConstraintViolationListInterface $violations)
+    public function createCustomer(Customer $customer, ConstraintViolationListInterface $violations, Request $request)
     {
         if (count($violations)) {
             $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
@@ -221,7 +224,11 @@ class BileMoController extends FOSRestController
             return $this->view($message, Response::HTTP_BAD_REQUEST);
         }
         $customer->setStore($this->getUser());
-        
+
+        $phoneId = $request->request->get('phone');
+        $phone = $this->em->getRepository(Phone::class)->findOneById($phoneId);       
+        $customer->setPhone($phone);
+
         $this->em->persist($customer);
         $this->em->flush();
         return $customer;
@@ -234,6 +241,7 @@ class BileMoController extends FOSRestController
      *      name = "gb_bilemo_customer_delete",
      *      requirements = {"id"="\d+"},
      * )
+     * @Rest\View(statusCode = 204)
      * @Doc\ApiDoc(
      *      section = "Customer",
      *      requirements={
@@ -254,7 +262,8 @@ class BileMoController extends FOSRestController
      *         {
      *             "name"="Token",
      *             "required"="true",
-     *             "description"="JWT Token provided once logged in (POST request with username and password by using the Route /login_check)."
+     *             "description"="JWT Token provided once logged in 
+     *                  (POST request with username and password by using the Route /login_check)."
      *         }
      *     }
      * )
@@ -262,10 +271,8 @@ class BileMoController extends FOSRestController
     public function deleteCustomer(Customer $customer)
     {
         if ($customer->getStore() == $this->getUser()) {
-            $message = 'The customer '.$customer->getFirstName().' '.$customer->getLastName().' has been properly removed from the database.';
             $this->em->remove($customer);
             $this->em->flush();
-            return $this->view(Response::HTTP_NO_CONTENT.': '.$message);
         } else {
             throw new AccessDeniedException('You are not allowed to suppress this customer.');
         }

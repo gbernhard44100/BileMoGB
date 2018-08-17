@@ -1,26 +1,25 @@
 <?php
-// src/GB/BileMoBundle/DataFixtures/ORM/LoadCustomer.php
 
-namespace GB\BileMoBundle\DataFixtures\ORM;
+namespace AppBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
-use GB\BileMoBundle\Entity\Customer;
-use Symfony\Component\Yaml\Yaml;
-
+use AppBundle\DataFixtures\ORM\LoadPhone;
+use AppBundle\DataFixtures\ORM\LoadStore;
+use AppBundle\Entity\Store;
+use AppBundle\Entity\Phone;
+use AppBundle\Entity\Customer;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use GB\BileMoBundle\DataFixtures\ORM\LoadPhone;
-use GB\BileMoBundle\DataFixtures\ORM\LoadStore;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadCustomer implements FixtureInterface, DependentFixtureInterface
+class LoadCustomer extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
         $customersSource = file_get_contents(__DIR__.'/CustomersData.json');
         $customers = json_decode($customersSource, true);
 
-        $phoneRepository = $manager->getRepository('GBBileMoBundle:Phone');
-        $storeRepository = $manager->getRepository('GBBileMoBundle:Store');
+        $phoneRepository = $manager->getRepository(Phone::class);
+        $storeRepository = $manager->getRepository(Store::class);
         
         foreach ($customers as $customer) {
             $customerToPersist = new Customer();
@@ -44,7 +43,7 @@ class LoadCustomer implements FixtureInterface, DependentFixtureInterface
         $manager->flush();
     }
     
-        public function getDependencies()
+    public function getDependencies()
     {
         return array(
             LoadPhone::class,

@@ -1,17 +1,20 @@
 <?php
 
-namespace GB\BileMoBundle\Entity;
+namespace AppBundle\Entity;
 
+use AppBundle\Entity\Store;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
-use Symfony\Component\Validator\Constraints as Assert;
 use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation as Serializer;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Customer
  *
  * @ORM\Table(name="customer")
- * @ORM\Entity(repositoryClass="GB\BileMoBundle\Repository\CustomerRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CustomerRepository")
+ * @UniqueEntity("email", message = "This email address is already used.")
  * @Hateoas\Relation(
  *      "self",
  *      href = @Hateoas\Route("gb_bilemo_customer_detail", parameters = { "id" = "expr(object.getId())" }),
@@ -97,13 +100,13 @@ class Customer
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Store", inversedBy="customers")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Store", inversedBy="customers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
 
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Phone", inversedBy="customers")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Phone", inversedBy="customers")
      * @ORM\JoinColumn(nullable=true)
      * @Serializer\Groups({"GET_CUSTOMER_PHONE"})
      */
@@ -270,7 +273,7 @@ class Customer
      *
      * @return Customer
      */
-    public function setStore(\GB\BileMoBundle\Entity\Store $store)
+    public function setStore(Store $store)
     {
         $this->store = $store;
 

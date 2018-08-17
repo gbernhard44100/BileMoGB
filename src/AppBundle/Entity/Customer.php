@@ -1,54 +1,81 @@
 <?php
 
-namespace GB\BileMoBundle\Entity;
+namespace AppBundle\Entity;
 
+use AppBundle\Entity\Phone;
+use AppBundle\Entity\Store;
 use Doctrine\ORM\Mapping as ORM;
+use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * User
+ * Customer
  *
  * @ORM\Table(name="customer")
- * @ORM\Entity(repositoryClass="GB\BileMoBundle\Repository\CustomerRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CustomerRepository")
+ * @UniqueEntity("email", message = "This email address is already used.")
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "gb_bilemo_customer_detail",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      ),
+ *      exclusion = @Hateoas\Exclusion({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
+ * )
+ * @Hateoas\Relation(
+ *      "suppress",
+ *      href = @Hateoas\Route(
+ *          "gb_bilemo_customer_delete",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      ),
+ *      exclusion = @Hateoas\Exclusion({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
+ * )
+ * @Hateoas\Relation(
+ *      "phone",
+ *      embedded = @Hateoas\Embedded("expr(object.getPhone())"),
+ *      exclusion = @Hateoas\Exclusion({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"}),
+ * )
  */
 class Customer
 {
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Serializer\Groups({"GET_USERS", "GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=255)
+     * @ORM\Column(name="firstName", type="string", length=255)
      * @Assert\NotBlank
-     * @Serializer\Groups({"GET_USERS", "GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
-    private $firstname;
+    private $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=255)
+     * @ORM\Column(name="lastName", type="string", length=255)
      * @Assert\NotBlank
-     * @Serializer\Groups({"GET_USERS", "GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
-    private $lastname;
+    private $lastName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phonenumber", type="string", length=255)
-     * @Serializer\Groups({"GET_USER_DETAIL"})
+     * @ORM\Column(name="phoneNumber", type="string", length=255)
+     * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
-    private $phonenumber;
+    private $phoneNumber;
 
     /**
      * @var string
@@ -58,7 +85,7 @@ class Customer
      *     match=true,
      *     message="The gender has to be noted M (for Male) or F (for Female)"
      * )
-     * @Serializer\Groups({"GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
     private $gender;
 
@@ -67,7 +94,7 @@ class Customer
      * @Assert\NotBlank
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      * @Assert\Email(message = "'{{ value }}' is not a valid email.")
-     * @Serializer\Groups({"GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
     private $email;
 
@@ -75,19 +102,20 @@ class Customer
      * @var string
      * @Assert\NotBlank
      * @ORM\Column(name="address", type="string", length=255)
-     * @Serializer\Groups({"GET_USER_DETAIL"})
+     * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Store", inversedBy="customers")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Store", inversedBy="customers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
-    
+
     /**
-     * @ORM\ManyToOne(targetEntity="GB\BileMoBundle\Entity\Phone", inversedBy="customers")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Phone", inversedBy="customers")
      * @ORM\JoinColumn(nullable=true)
+     * @Serializer\Groups({"GET_CUSTOMER_PHONE"})
      */
     private $phone;
 
@@ -102,63 +130,63 @@ class Customer
     }
 
     /**
-     * Set firstname
+     * Set firstName
      *
-     * @param string $firstname
+     * @param string $firstName
      *
      * @return Customer
      */
-    public function setFirstname($firstname)
+    public function setFirstName($firstName)
     {
-        $this->firstname = $firstname;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
     /**
-     * Get firstname
+     * Get firstName
      *
      * @return string
      */
-    public function getFirstname()
+    public function getFirstName()
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
     /**
-     * Set lastname
+     * Set lastName
      *
-     * @param string $lastname
+     * @param string $lastName
      *
      * @return Customer
      */
-    public function setLastname($lastname)
+    public function setLastName($lastName)
     {
-        $this->lastname = $lastname;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
     /**
-     * Get lastname
+     * Get lastName
      *
      * @return string
      */
-    public function getLastname()
+    public function getLastName()
     {
-        return $this->lastname;
+        return $this->lastName;
     }
 
     /**
      * Set phoneNumber
      *
-     * @param string $phonenumber
+     * @param string $phoneNumber
      *
      * @return Customer
      */
-    public function setPhonenumber($phonenumber)
+    public function setPhoneNumber($phoneNumber)
     {
-        $this->phonenumber = $phonenumber;
+        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }
@@ -168,9 +196,9 @@ class Customer
      *
      * @return string
      */
-    public function getPhonenumber()
+    public function getPhoneNumber()
     {
-        return $this->phonenumber;
+        return $this->phoneNumber;
     }
 
     /**
@@ -248,11 +276,11 @@ class Customer
     /**
      * Set store
      *
-     * @param \GB\BileMoBundle\Entity\Store $store
+     * @param Store $store
      *
      * @return Customer
      */
-    public function setStore(\GB\BileMoBundle\Entity\Store $store)
+    public function setStore(Store $store)
     {
         $this->store = $store;
 
@@ -262,7 +290,7 @@ class Customer
     /**
      * Get store
      *
-     * @return \GB\BileMoBundle\Entity\Store
+     * @return Store
      */
     public function getStore()
     {
@@ -272,11 +300,11 @@ class Customer
     /**
      * Set phone
      *
-     * @param \GB\BileMoBundle\Entity\Phone $phone
+     * @param Phone $phone
      *
      * @return Customer
      */
-    public function setPhone(\GB\BileMoBundle\Entity\Phone $phone = null)
+    public function setPhone(Phone $phone = null)
     {
         $this->phone = $phone;
 
@@ -286,10 +314,11 @@ class Customer
     /**
      * Get phone
      *
-     * @return \GB\BileMoBundle\Entity\Phone
+     * @return Phone
      */
     public function getPhone()
     {
         return $this->phone;
     }
+
 }

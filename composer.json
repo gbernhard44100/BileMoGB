@@ -20,8 +20,9 @@
         ]
     },
     "require": {
-        "php": ">=5.5.9",
-        "doctrine/doctrine-bundle": "^1.6",
+        "php": ">=7.1",
+        "doctrine/doctrine-bundle": "^1.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.0",
         "doctrine/orm": "^2.5",
         "firebase/php-jwt": "^5.0",
         "friendsofsymfony/rest-bundle": "^2.3",
@@ -39,7 +40,6 @@
         "willdurand/hateoas-bundle": "^1.4"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^2.0",
         "sensio/generator-bundle": "^3.0",
         "symfony/phpunit-bridge": "^3.0"
     },

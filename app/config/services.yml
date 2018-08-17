@@ -14,3 +14,9 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
     
+    AppBundle\:
+        resource: '../../src/AppBundle/*'
+        exclude: '../../src/AppBundle/{Entity,Repository}'
+        tags: 
+            - 'controller.service_arguments'
+            - 'fos_rest.exception.twig_controller'

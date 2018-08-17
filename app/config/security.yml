@@ -1,21 +1,19 @@
-# To get started with security, check out the documentation:
-# https://symfony.com/doc/current/security.html
 security:
 
-    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     encoders:
-        GB\BileMoBundle\Entity\Store: 
-            algorithm: sha512
-            encode_as_base64: false
-            iterations: 1
+        AppBundle\Entity\Store: 
+            algorithm: bcrypt
     
     providers:
         store:
             entity:
-                class: GB\BileMoBundle\Entity\Store
+                class: AppBundle\Entity\Store
                 property: userName
             
     firewalls:
+        api_doc:
+            pattern: ^/api/doc
+            security: false
         login:
             pattern:  ^/login
             stateless: true
@@ -24,12 +22,9 @@ security:
                 check_path:               /login_check
                 success_handler:          lexik_jwt_authentication.handler.authentication_success
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
-                require_previous_session: false
-        api_doc:
-            pattern: ^api/doc
-            security: false        
+                require_previous_session: false      
         main:
-            pattern:   ^/(customers|phones)
+            pattern:   ^/
             provider: store
             stateless: true
             guard:
@@ -37,5 +32,4 @@ security:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/,       roles: ROLE_USER }
