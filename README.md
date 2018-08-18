@@ -36,7 +36,7 @@ and type **y**
 *php bin/console assetic:dump* if you  want to use in dev mode  
 or *php bin/console assetic:dump --env=prod* if you want to use in production
 
-##Usage:
+## Usage:
 Before using this API, you can read this documentation : [BileMoGB documentation](http://bilemogb.bernharddesign.ovh/api/doc)
 
-##ENJOY!!!
+## ENJOY!!!
