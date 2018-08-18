@@ -10,7 +10,9 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Hateoas\Configuration\Annotation as Hateoas;
-use Nelmio\ApiDocBundle\Annotation as Doc;
+use Nelmio\ApiDocBundle\Annotation\Operation;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,21 +38,17 @@ class BileMoController extends FOSRestController
      *     statusCode = 200,
      *     serializerGroups = {"PHONE_GET"}
      * )
-     * @Doc\ApiDoc(
-     *      section = "Phones",
-     *      description = "Get the list of phones.",
-     *      headers={
-     *         {
-     *             "name"="Token",
-     *             "required"="true",
-     *             "description"="JWT Token provided once logged in 
-     *                  (POST request with username and password by using the Route /login_check)."
-     *         }
-     *      },
-     *      statusCodes={
-     *          200="Return the list of phones.",
-     *          401="The JWT Token is not valid. You need to login to obtain a new JWT Token."
-     *      }
+     * @Operation(
+     *     tags={"Phones"},
+     *     summary="Get the list of phones.",
+     *     @SWG\Response(
+     *         response="200",
+     *         description="Return the list of phones."
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="The JWT Token is not valid. You need to login to obtain a new JWT Token."
+     *     )
      * )
      */
     public function phonesAction()
@@ -69,32 +67,28 @@ class BileMoController extends FOSRestController
      *      statusCode = 200,
      *      serializerGroups = {"PHONE_DETAIL_GET"}
      * )
-     * @Doc\ApiDoc(
-     *      section = "Phones",
-     *      resource = true,
-     *      description = "Get the detail information about the selected phone.",
-     *      requirements={
-     *          {
-     *              "name" = "id",
-     *              "dataType" = "integer",
-     *              "requirement" = "\d+",
-     *              "description" = "the id number of the phone."
-     *          }
-     *      },
-     *      headers={
-     *         {
-     *             "name"="Token",
-     *             "required"="true",
-     *             "description"="JWT Token provided once logged in 
-     *                  (POST request with username and password by using the Route /login_check)."
-     *         }
-     *      },
-     *      statusCodes={
-     *          200="Returned the detail information of the selected phone.",
-     *          401="The JWT Token is not valid. You need to login to obtain a new JWT Token.",
-     *          404="Return an error message because the id provided doesn't meet the requirements or the phone having this id number doesn't exist in the database."
-     *      }
-     * ) 
+     * @Operation(
+     *     tags={"Phones"},
+     *     summary="Get the detail information about the selected phone.",
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         type="integer",
+     *         description="Id of the phone you want to have the detail information."
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="Returned the detail information of the selected phone."
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="The JWT Token is not valid. You need to login to obtain a new JWT Token."
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="Return an error message because the id provided doesn't meet the requirements or the phone having this id number doesn't exist in the database."
+     *     )
+     * )
      */
     public function phoneDetailAction(Phone $phone)
     {
@@ -110,21 +104,17 @@ class BileMoController extends FOSRestController
      *      statusCode = 200,
      *      serializerGroups = {"GET_CUSTOMERS"}
      * )
-     * @Doc\ApiDoc(
-     *      section = "Customer",
-     *      description = "Get the list of customers linked to the authenticated user.",
-     *      headers={
-     *         {
-     *             "name"="Token",
-     *             "required"="true",
-     *             "description"="JWT Token provided once logged in 
-     *                  (POST request with username and password by using the Route /login_check)."
-     *         }
-     *      },
-     *      statusCodes={
-     *          200="Return the list of customers linked to the authenticated user.",
-     *          401="The JWT Token is not valid. You need to login to obtain a new JWT Token."
-     *      }
+     * @Operation(
+     *     tags={"Customer"},
+     *     summary="Get the list of customers linked to the authenticated user.",
+     *     @SWG\Response(
+     *         response="200",
+     *         description="Returned the list of customers linked to the authenticated user."
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="The JWT Token is not valid. You need to login to obtain a new JWT Token."
+     *     )
      * )
      */
     public function customersFromStoreAction()
@@ -143,32 +133,31 @@ class BileMoController extends FOSRestController
      *      statusCode = 201,
      *      serializerGroups = {"GET_CUSTOMER_DETAIL", "PHONE_GET"}
      * )
-     * @Doc\ApiDoc(
-     *      section = "Customer",
-     *      resource = true,
-     *      description = "Get the detail information about the selected customer.",
-     *      requirements={
-     *          {
-     *              "name" = "id",
-     *              "dataType" = "integer",
-     *              "requirement" = "\d+",
-     *              "description" = "the id number of the customer."
-     *          }
-     *      },
-     *      statusCodes={
-     *          200="Returned the detail information about the selected customer.",
-     *          401="The JWT Token is not valid. You need to login to obtain a new JWT Token.",
-     *          403="The user authenticated is not allowed to have access to the customer selected because this customer is not linked to his account.",
-     *          404="Return an error message because the id provided doesn't meet the requirements or the customer having this id number doesn't exist in the database."
-     *      },
-     *      headers={
-     *         {
-     *             "name"="Token",
-     *             "required"="true",
-     *             "description"="JWT Token provided once logged in 
-     *                  (POST request with username and password by using the Route /login_check)."
-     *         }
-     *     }
+     * @Operation(
+     *     tags={"Customer"},
+     *     summary="Get the detail information about the selected customer.",
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         type="integer",
+     *         description="Id of the customer you want to have the detail information."
+     *     ),
+     *     @SWG\Response(
+     *         response="200",
+     *         description="Returned the detail information about the selected customer."
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="The JWT Token is not valid. You need to login to obtain a new JWT Token."
+     *     ),
+     *     @SWG\Response(
+     *         response="403",
+     *         description="The user authenticated is not allowed to have access to the customer selected because this customer is not linked to his account."
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="Return an error message because the id provided doesn't meet the requirements or the customer having this id number doesn't exist in the database."
+     *     )
      * )
      */
     public function customerDetailAction(Customer $customer = null)
@@ -181,7 +170,6 @@ class BileMoController extends FOSRestController
     }
 
     /**
-     * 
      * @Rest\Post(
      *      path = "customers",
      *      name = "gb_bilemo_customer_create",
@@ -195,31 +183,27 @@ class BileMoController extends FOSRestController
      *      converter="fos_rest.request_body", 
      *      options={"deserializationContext"={"groups"={"GET_CUSTOMER_DETAIL"}, "version"="1.0"}}
      * )
-     * @Doc\ApiDoc(
-     *      section = "Customer",
-     *      resource = true,
-     *      description = "Get the detail information about the selected customer.",
-     *      input = {
-     *          "class" = "AppBundle\Form\CustomerType",
-     *          "name" = ""
-     *      },
-     *      statusCodes={
-     *          201="Return the detail information of the customer that has just been created.",
-     *          400="Return the reasons why the content filled in the form is not valid.",
-     *          401="The JWT Token is not valid. You need to login to obtain a new JWT Token."
-     *      },
-     *      headers={
-     *         {
-     *             "name"="Token",
-     *             "required"="true",
-     *             "description"="JWT Token provided once logged in 
-     *                  (POST request with username and password by using the Route /login_check)."
-     *         },
-     *         {
-     *             "name"="Content-Type",
-     *             "description"="The format type of your content you fill in your POST request."
-     *         }
-     *      },
+     * @Operation(
+     *     tags={"Customer"},
+     *     summary="Register a new customer in your store database.",
+     *     @SWG\Parameter(
+     *         name="form",
+     *         in="body",
+     *         description="Customer form filled in json.",
+     *         @Model(type=AppBundle\Form\CustomerType::class)
+     *     ),
+     *     @SWG\Response(
+     *         response="201",
+     *         description="Return the detail information of the customer that has just been created."
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="Return the reasons why the content filled in the form is not valid."
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="The JWT Token is not valid. You need to login to obtain a new JWT Token."
+     *     )
      * )
      */
     public function createCustomer(Customer $customer, ConstraintViolationListInterface $violations, Request $request)
@@ -243,37 +227,37 @@ class BileMoController extends FOSRestController
     }
 
     /**
-     * 
      * @Rest\Delete(
      *      path = "customers/{id}",
      *      name = "gb_bilemo_customer_delete",
      *      requirements = {"id"="\d+"},
      * )
      * @Rest\View(statusCode = 204)
-     * @Doc\ApiDoc(
-     *      section = "Customer",
-     *      requirements={
-     *          {
-     *              "name" = "id",
-     *              "dataType" = "integer",
-     *              "requirement" = "\d+",
-     *              "description" = "the id number of the customer."
-     *          }
-     *      },
-     *      statusCodes={
-     *          204="The customer selected has been properly deleted from the database.",
-     *          401="The JWT Token is not valid. You need to login to obtain a new JWT Token.",
-     *          403="The user authenticated is not allowed to have access to the customer selected because this customer is not linked to his account.",
-     *          404="Return an error message because the id provided doesn't meet the requirements or the customer having this id number doesn't exist in the database."
-     *      },
-     *      headers={
-     *         {
-     *             "name"="Token",
-     *             "required"="true",
-     *             "description"="JWT Token provided once logged in 
-     *                  (POST request with username and password by using the Route /login_check)."
-     *         }
-     *     }
+     * @Operation(
+     *     tags={"Customer"},
+     *     summary="Delete the selected customer.",
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         type="integer",
+     *         description="Id of the customer you want to delete."
+     *     ),
+     *     @SWG\Response(
+     *         response="204",
+     *         description="The customer selected has been properly deleted from the database."
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="The JWT Token is not valid. You need to login to obtain a new JWT Token."
+     *     ),
+     *     @SWG\Response(
+     *         response="403",
+     *         description="The user authenticated is not allowed to have access to the customer selected because this customer is not linked to his account."
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="Return an error message because the id provided doesn't meet the requirements or the customer having this id number doesn't exist in the database."
+     *     )
      * )
      */
     public function deleteCustomer(Customer $customer)
@@ -285,5 +269,4 @@ class BileMoController extends FOSRestController
             throw new AccessDeniedException('You are not allowed to suppress this customer.');
         }
     }
-
 }

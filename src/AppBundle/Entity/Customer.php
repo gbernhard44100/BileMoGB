@@ -88,11 +88,11 @@ class Customer
 
     /**
      * @var string
-     * @ORM\Column(name="gender", type="string", length=1)
+     * @ORM\Column(name="gender", type="string", length=3)
      * @Assert\Regex(
-     *     pattern="/^(M|F)$/i",
+     *     pattern="/^(Mr|Mme)$/i",
      *     match=true,
-     *     message="The gender has to be noted M (for Male) or F (for Female)"
+     *     message="The gender has to be noted Mr or Mme."
      * )
      * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
