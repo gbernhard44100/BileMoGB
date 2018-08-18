@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Phone;
 use AppBundle\Entity\Customer;
+use AppBundle\Form\CustomerType;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -189,12 +190,19 @@ class BileMoController extends FOSRestController
      *      statusCode = 201,
      *      serializerGroups = {"GET_CUSTOMER_DETAIL", "PHONE_GET"}
      * )
-     * @ParamConverter("customer", converter="fos_rest.request_body", 
-     * options={"deserializationContext"={"groups"={"GET_CUSTOMER_DETAIL"}, "version"="1.0"}})
+     * @ParamConverter(
+     *      "customer",
+     *      converter="fos_rest.request_body", 
+     *      options={"deserializationContext"={"groups"={"GET_CUSTOMER_DETAIL"}, "version"="1.0"}}
+     * )
      * @Doc\ApiDoc(
      *      section = "Customer",
      *      resource = true,
      *      description = "Get the detail information about the selected customer.",
+     *      input = {
+     *          "class" = "AppBundle\Form\CustomerType",
+     *          "name" = ""
+     *      },
      *      statusCodes={
      *          201="Return the detail information of the customer that has just been created.",
      *          400="Return the reasons why the content filled in the form is not valid.",

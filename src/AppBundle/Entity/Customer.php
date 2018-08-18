@@ -55,7 +55,10 @@ class Customer
      * @var string
      *
      * @ORM\Column(name="firstName", type="string", length=255)
-     * @Assert\NotBlank
+     * @Assert\Length(min = 2, max = 255,
+     *      minMessage = "This field need to have at least 2 characters.",
+     *      maxMessage = "This field cannot be longer than 255 characters."
+     * )
      * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
     private $firstName;
@@ -64,14 +67,20 @@ class Customer
      * @var string
      *
      * @ORM\Column(name="lastName", type="string", length=255)
-     * @Assert\NotBlank
+     * @Assert\Length(min = 2, max = 255,
+     *      minMessage = "This field need to have at least 2 characters.",
+     *      maxMessage = "This field cannot be longer than 255 characters."
+     * )
      * @Serializer\Groups({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"})
      */
     private $lastName;
 
     /**
      * @var string
-     *
+     * @Assert\Length(min = 2, max = 255,
+     *      minMessage = "This field need to have at least 2 characters.",
+     *      maxMessage = "This field cannot be longer than 255 characters."
+     * )
      * @ORM\Column(name="phoneNumber", type="string", length=255)
      * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
@@ -91,7 +100,10 @@ class Customer
 
     /**
      * @var string
-     * @Assert\NotBlank
+     * @Assert\Length(min = 2, max = 255,
+     *      minMessage = "This field need to have at least 2 characters.",
+     *      maxMessage = "This field cannot be longer than 255 characters."
+     * )
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      * @Assert\Email(message = "'{{ value }}' is not a valid email.")
      * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
@@ -100,7 +112,10 @@ class Customer
 
     /**
      * @var string
-     * @Assert\NotBlank
+     * @Assert\Length(min = 2, max = 255,
+     *      minMessage = "This field need to have at least 2 characters.",
+     *      maxMessage = "This field cannot be longer than 255 characters."
+     * )
      * @ORM\Column(name="address", type="string", length=255)
      * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
