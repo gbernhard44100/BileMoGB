@@ -5,7 +5,7 @@ BileMoGB API
 This is a Symfony project I have launched on May 24 in 2018, in order to meet the next specifications : [Specifications for project 7 Parcours developer PHP / Symfony](https://openclassrooms.com/fr/projects/creez-un-web-service-exposant-une-api).
 
 ## Code quality:
-Link of the code analysis made by Codacy : [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5e1321b940f641d692d7256b25d26719)](https://www.codacy.com/app/gbernhard44100/snowtricks?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gbernhard44100/snowtricks&amp;utm_campaign=Badge_Grade) <- reached on the 13 May 2018
+Link of the code analysis made by Codacy : [![Codacy Badge](https://api.codacy.com/project/badge/Grade/844bdfb8d8b44b15bd8679b7445c9ec5)](https://www.codacy.com/project/gbernhard44100/BileMoGB/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gbernhard44100/BileMoGB&amp;utm_campaign=Badge_Grade_Dashboard) <- reached on the 13 May 2018
 
 ## Main Code / frameworks / Libraries used for this project :
 * PHP 7.2
