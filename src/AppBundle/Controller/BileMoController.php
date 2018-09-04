@@ -16,6 +16,7 @@ use Swagger\Annotations as SWG;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -160,7 +161,7 @@ class BileMoController extends FOSRestController
      *     )
      * )
      */
-    public function customerDetailAction(Customer $customer = null)
+    public function customerDetailAction(Customer $customer)
     {
         if ($customer->getStore() == $this->getUser()) {
             return $customer;
@@ -216,14 +217,15 @@ class BileMoController extends FOSRestController
             return $this->view($message, Response::HTTP_BAD_REQUEST);
         }
         $customer->setStore($this->getUser());
-
         $phoneId = $request->request->get('phone');
         $phone = $this->em->getRepository(Phone::class)->findOneById($phoneId);       
         $customer->setPhone($phone);
-
         $this->em->persist($customer);
         $this->em->flush();
-        return $customer;
+        return $this->view($customer, Response::HTTP_CREATED, ['Location' => $this->generateUrl(
+            'gb_bilemo_customer_detail',
+            ['id' => $customer->getId()]
+        )]);
     }
 
     /**

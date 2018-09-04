@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Hateoas\Relation(
  *      "phone",
  *      embedded = @Hateoas\Embedded("expr(object.getPhone())"),
- *      exclusion = @Hateoas\Exclusion({"GET_CUSTOMERS", "GET_CUSTOMER_DETAIL"}),
+ *      exclusion = @Hateoas\Exclusion({"GET_CUSTOMER_DETAIL"}),
  * )
  */
 class Customer
@@ -130,7 +130,7 @@ class Customer
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Phone", inversedBy="customers")
      * @ORM\JoinColumn(nullable=true)
-     * @Serializer\Groups({"GET_CUSTOMER_PHONE"})
+     * @Serializer\Groups({"GET_CUSTOMER_DETAIL"})
      */
     private $phone;
 
